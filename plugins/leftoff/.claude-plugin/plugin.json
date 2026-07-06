@@ -1,0 +1,11 @@
+{
+  "name": "leftoff",
+  "description": "Local-first memory and next-task guidance for unfinished developer work.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Halfblood-Prince"
+  },
+  "homepage": "https://github.com/Halfblood-Prince/leftoff",
+  "repository": "https://github.com/Halfblood-Prince/leftoff",
+  "license": "MIT"
+}

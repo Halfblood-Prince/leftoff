@@ -1,0 +1,14 @@
+# Additional leftoff metadata exclusions.
+# These patterns are used on top of built-in secret and dependency-directory exclusions.
+#
+# Supported forms:
+# - exact relative paths, such as secrets/example.txt
+# - directory prefixes ending in /
+# - simple glob patterns accepted by filepath.Match
+
+.env
+.env.*
+*.pem
+*.key
+node_modules/
+vendor/
