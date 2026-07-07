@@ -4,7 +4,7 @@
 [![CodeQL](https://github.com/Halfblood-Prince/leftoff/actions/workflows/codeql.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/codeql.yml)
 [![Fuzz](https://github.com/Halfblood-Prince/leftoff/actions/workflows/fuzz.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/fuzz.yml)
 [![Release](https://github.com/Halfblood-Prince/leftoff/actions/workflows/release.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/release.yml)
-[![Go](https://img.shields.io/badge/go-1.22%2B-00ADD8)](go.mod)
+[![Go](https://img.shields.io/badge/go-1.25.8%2B-00ADD8)](go.mod)
 
 **Your personal operating system for unfinished developer work.**
 
@@ -12,7 +12,7 @@
 
 ## Install
 
-Install the CLI with Go:
+Install the CLI with Go 1.25.8+:
 
 ```sh
 go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest

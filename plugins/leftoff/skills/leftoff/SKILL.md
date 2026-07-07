@@ -88,7 +88,7 @@ If no bundled binary is present, `leftoff` needs a local binary.
 
 Option 1: Run setup with explicit approval.
 
-Option 2: Install Go 1.22+ and run `go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest`.
+Option 2: Install Go 1.25.8+ and run `go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest`.
 
 Option 3: Download the verified release archive manually.
 

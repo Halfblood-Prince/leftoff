@@ -1,10 +1,10 @@
 # leftoff
 
-[![CI](../../actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml)
-[![CodeQL](../../actions/workflows/codeql.yml/badge.svg)](../../actions/workflows/codeql.yml)
-[![Fuzz](../../actions/workflows/fuzz.yml/badge.svg)](../../actions/workflows/fuzz.yml)
-[![Release](../../actions/workflows/release.yml/badge.svg)](../../actions/workflows/release.yml)
-[![Go](https://img.shields.io/badge/go-1.22%2B-00ADD8)](../../go.mod)
+[![CI](https://github.com/Halfblood-Prince/leftoff/actions/workflows/ci.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Halfblood-Prince/leftoff/actions/workflows/codeql.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/codeql.yml)
+[![Fuzz](https://github.com/Halfblood-Prince/leftoff/actions/workflows/fuzz.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/fuzz.yml)
+[![Release](https://github.com/Halfblood-Prince/leftoff/actions/workflows/release.yml/badge.svg)](https://github.com/Halfblood-Prince/leftoff/actions/workflows/release.yml)
+[![Go](https://img.shields.io/badge/go-1.25.8%2B-00ADD8)](../../go.mod)
 
 **Your personal operating system for unfinished developer work.**
 
@@ -130,7 +130,7 @@ Option 1: Run setup with explicit approval:
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-binary.ps1
 ```
 
-Option 2: Install Go 1.22+ and run `go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest`.
+Option 2: Install Go 1.25.8+ and run `go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest`.
 
 Option 3: Download the verified release archive manually.
 

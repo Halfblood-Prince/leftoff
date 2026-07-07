@@ -5,7 +5,7 @@
 ## Requirements
 
 - The skill launcher at `scripts/leftoff` or `scripts/leftoff.ps1`.
-- Go 1.22+ only to build, test, or install the CLI with `go install`.
+- Go 1.25.8+ only to build, test, or install the CLI with `go install`.
 - Git is optional. Without Git, capture and validation still work; resume reports the missing Git context as uncertainty.
 - The core workflow does not require network access.
 - Binary setup requires explicit user approval before network access and verifies GitHub artifact provenance plus `SHA256SUMS`.

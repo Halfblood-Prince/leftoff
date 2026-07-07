@@ -217,9 +217,8 @@ else
   tar -cf - \
     --exclude '.git' \
     --exclude '.tmp' \
-    --exclude './leftoff' \
-    --exclude './leftoff.exe' \
     -C "$source_dir" . | tar -xf - -C "$target"
+  rm -f "$target/leftoff" "$target/leftoff.exe"
   chmod +x "$target/bin/leftoff" "$target/scripts/setup-binary.sh"
   if [ -f "$target/skills/leftoff/scripts/leftoff" ]; then
     chmod +x "$target/skills/leftoff/scripts/leftoff" "$target/skills/leftoff/scripts/setup-binary.sh"

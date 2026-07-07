@@ -50,7 +50,7 @@ Platform: $platform
 Option 1: Run setup with explicit approval:
   powershell -ExecutionPolicy Bypass -File "$setupScript"
 
-Option 2: Install Go 1.22+ and use the Go install fallback:
+Option 2: Install Go 1.25.8+ and use the Go install fallback:
   go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest
 
 Option 3: Download the verified release archive manually.
