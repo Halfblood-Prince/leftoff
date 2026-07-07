@@ -1,6 +1,6 @@
 # OpenCode Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `opencode`
 Suggested target: `~/.opencode/skills/leftoff/`
 

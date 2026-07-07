@@ -1,6 +1,6 @@
 # Mistral Vibe Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `mistral-vibe`
 Suggested target: `~/.mistral-vibe/skills/leftoff/`
 

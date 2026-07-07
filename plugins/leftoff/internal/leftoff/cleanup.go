@@ -304,12 +304,12 @@ func parseBranchCleanupInfo(output string, current string, clock func() time.Tim
 		}
 		date := parseDateField(parts[1])
 		info := BranchInfo{
-			Name:       strings.TrimSpace(parts[0]),
+			Name:       sanitizeMetadataBranch(parts[0]),
 			Date:       date,
-			Upstream:   strings.TrimSpace(parts[2]),
+			Upstream:   sanitizeMetadataBranch(parts[2]),
 			Hash:       shortHash(strings.TrimSpace(parts[3])),
-			Subject:    cleanSummary(parts[4], 120),
-			TrackShort: strings.TrimSpace(parts[5]),
+			Subject:    sanitizeMetadataTitle(parts[4]),
+			TrackShort: sanitizeMetadataTitle(parts[5]),
 		}
 		info.Current = info.Name == current
 		info.Protected = IsProtectedBranch(info.Name)

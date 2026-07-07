@@ -41,11 +41,15 @@ if command -v go >/dev/null 2>&1; then
 fi
 
 cat >&2 <<EOF
-leftoff binary is not installed for ${goos}_${goarch}.
+leftoff needs a local binary.
 
-Ask the user for explicit approval before network access, then run:
+Platform: ${goos}_${goarch}
+
+Option 1: Run setup with explicit approval:
   $plugin_root/scripts/setup-binary.sh
 
-If Go 1.22+ is installed, the launcher can also run the source fallback.
+Option 2: Install Go 1.22+ and use the source fallback.
+
+Option 3: Download the verified release archive manually.
 EOF
 exit 127

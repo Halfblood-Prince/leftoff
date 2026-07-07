@@ -14,6 +14,7 @@
 ## Development
 
 ```sh
+cd plugins/leftoff
 gofmt -w cmd internal
 go test ./...
 ```

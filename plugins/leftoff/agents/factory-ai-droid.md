@@ -1,6 +1,6 @@
 # Factory AI Droid Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `factory-ai-droid`, `factory-droid`, `droid`
 Suggested target: `~/.factory-ai-droid/skills/leftoff/`
 

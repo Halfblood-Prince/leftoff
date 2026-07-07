@@ -1,6 +1,6 @@
 # GitHub Copilot CLI Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `github-copilot-cli`, `copilot-cli`, `copilot`
 Suggested target: `~/.github-copilot-cli/skills/leftoff/`
 

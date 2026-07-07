@@ -1,6 +1,6 @@
 # AstrBot Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `astrbot`
 Suggested target: `~/.astrbot/skills/leftoff/`
 

@@ -1,6 +1,6 @@
 # Agent Compatibility
 
-`leftoff` is a host-neutral skill backed by a Go CLI. Agents should load `skills/leftoff/SKILL.md` for shared behavior and use files in `agents/` only for host-specific loading details.
+`leftoff` is a host-neutral skill backed by a Go CLI. Hosts should load `skills/leftoff/SKILL.md` for shared behavior and use files in `agents/` only for host-specific loading details.
 
 ## Requirements
 
@@ -10,9 +10,9 @@
 - The core workflow does not require network access.
 - Binary setup requires explicit user approval before network access and verifies GitHub artifact provenance plus `SHA256SUMS`.
 
-## Supported Agent Targets
+## Agent Targets
 
-The complete supported-agent matrix is maintained in [../../../agents/supported.md](../../../agents/supported.md). It includes:
+The complete compatibility matrix is maintained in [../../../agents/supported.md](../../../agents/supported.md). It includes:
 
 - status for each requested agent;
 - installer aliases such as `claude-code`, `cursor`, `copilot-cli`, `gemini`, `antigravity`, `roo-code`, and `windsurf`;
@@ -23,7 +23,7 @@ Suggested targets are local conventions. If an agent uses a different custom-ins
 
 ## Compatibility Matrix
 
-| Capability | Supported agents |
+| Capability | Standard skill hosts |
 |---|---|
 | Load `skills/leftoff/SKILL.md` | yes |
 | Run plugin launcher through shell | yes |

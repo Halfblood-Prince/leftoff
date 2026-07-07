@@ -1,6 +1,6 @@
 # OpenClaw Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `openclaw`
 Suggested target: `~/.openclaw/skills/leftoff/`
 

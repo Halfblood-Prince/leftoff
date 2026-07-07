@@ -1,6 +1,6 @@
 # Lingma Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `lingma`
 Suggested target: `~/.lingma/skills/leftoff/`
 

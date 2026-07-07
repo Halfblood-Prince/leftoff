@@ -1,6 +1,6 @@
 # OpenHands Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `openhands`
 Suggested target: `~/.openhands/skills/leftoff/`
 

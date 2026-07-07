@@ -1,6 +1,6 @@
 # Mux Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `mux`
 Suggested target: `~/.mux/skills/leftoff/`
 

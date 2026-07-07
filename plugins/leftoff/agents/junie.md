@@ -1,6 +1,6 @@
 # Junie Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `junie`
 Suggested target: `~/.junie/skills/leftoff/`
 

@@ -61,7 +61,7 @@ func InspectRepository(ctx context.Context, repoPath string, clock func() time.T
 	snapshot.RepoName = filepath.Base(snapshot.Root)
 
 	if branch, ok := runGitText(ctx, snapshot.Root, &snapshot, "branch", "--show-current"); ok {
-		snapshot.Branch = strings.TrimSpace(branch)
+		snapshot.Branch = sanitizeMetadataBranch(branch)
 	}
 	if snapshot.Branch == "" {
 		snapshot.Branch = "detached or unknown"
@@ -125,19 +125,64 @@ func InspectRepository(ctx context.Context, repoPath string, clock func() time.T
 }
 
 func runGitText(ctx context.Context, repoPath string, snapshot *GitSnapshot, args ...string) (string, bool) {
-	command := "git -C " + sanitizeExternalMetadata(repoPath) + " " + strings.Join(args, " ")
-	snapshot.Commands = append(snapshot.Commands, command)
+	cmdArgs := gitScanArgs(repoPath, args...)
+	command := "git " + strings.Join(sanitizeCommandArgs(cmdArgs), " ")
+	snapshot.Commands = append(snapshot.Commands, sanitizeMetadataCommand(command))
 
 	cmdCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	cmdArgs := append([]string{"-C", repoPath}, args...)
 	cmd := exec.CommandContext(cmdCtx, "git", cmdArgs...)
+	cmd.Env = gitScanEnv()
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return "", false
 	}
 	return string(output), true
+}
+
+func gitScanArgs(repoPath string, args ...string) []string {
+	cmdArgs := []string{
+		"-c", "core.fsmonitor=false",
+		"-c", "core.fsmonitorHookVersion=0",
+		"-c", "core.untrackedCache=false",
+		"-c", "credential.helper=",
+		"-c", "core.askPass=",
+		"-C", repoPath,
+	}
+	return append(cmdArgs, args...)
+}
+
+func gitScanEnv() []string {
+	overrides := map[string]string{
+		"GCM_INTERACTIVE":     "never",
+		"GIT_CONFIG_GLOBAL":   os.DevNull,
+		"GIT_CONFIG_NOSYSTEM": "1",
+		"GIT_OPTIONAL_LOCKS":  "0",
+		"GIT_TERMINAL_PROMPT": "0",
+	}
+
+	env := os.Environ()
+	filtered := make([]string, 0, len(env)+len(overrides))
+	for _, entry := range env {
+		key, _, _ := strings.Cut(entry, "=")
+		if _, overridden := overrides[key]; overridden {
+			continue
+		}
+		filtered = append(filtered, entry)
+	}
+	for key, value := range overrides {
+		filtered = append(filtered, key+"="+value)
+	}
+	return filtered
+}
+
+func sanitizeCommandArgs(args []string) []string {
+	out := make([]string, 0, len(args))
+	for _, arg := range args {
+		out = append(out, sanitizeMetadataCommand(arg))
+	}
+	return out
 }
 
 func firstFetchRemote(output string) string {
@@ -195,7 +240,7 @@ func parseChangedFiles(output string, repoRoot string) ([]ChangedFile, int) {
 			skipped++
 			continue
 		}
-		changed = append(changed, ChangedFile{Status: status, Path: sanitizeExternalMetadata(filepath.ToSlash(rel))})
+		changed = append(changed, ChangedFile{Status: status, Path: sanitizeMetadataPath(filepath.ToSlash(rel))})
 	}
 
 	return changed, skipped
@@ -214,7 +259,7 @@ func parseCommits(output string) []Commit {
 		}
 		hash := fields[0]
 		summary := strings.TrimSpace(strings.TrimPrefix(line, hash))
-		commits = append(commits, Commit{Hash: hash, Summary: cleanSummary(sanitizeExternalMetadata(summary), 160)})
+		commits = append(commits, Commit{Hash: hash, Summary: sanitizeMetadataTitle(summary)})
 	}
 	return commits
 }
@@ -260,12 +305,12 @@ func parseWorktrees(output string) []Worktree {
 		switch {
 		case strings.HasPrefix(line, "worktree "):
 			flush()
-			current.Path = sanitizeExternalMetadata(strings.TrimSpace(strings.TrimPrefix(line, "worktree ")))
+			current.Path = sanitizeMetadataPath(strings.TrimSpace(strings.TrimPrefix(line, "worktree ")))
 		case strings.HasPrefix(line, "HEAD "):
 			current.Head = strings.TrimSpace(strings.TrimPrefix(line, "HEAD "))
 		case strings.HasPrefix(line, "branch "):
 			branch := strings.TrimSpace(strings.TrimPrefix(line, "branch "))
-			current.Branch = sanitizeExternalMetadata(strings.TrimPrefix(branch, "refs/heads/"))
+			current.Branch = sanitizeMetadataBranch(strings.TrimPrefix(branch, "refs/heads/"))
 		case line == "detached":
 			current.Branch = "detached"
 		}
@@ -285,7 +330,7 @@ func parseStaleBranches(output string, now time.Time, staleAfterDays int) []Stal
 		if len(parts) != 2 {
 			continue
 		}
-		name := sanitizeExternalMetadata(parts[0])
+		name := sanitizeMetadataBranch(parts[0])
 		commitTime, err := time.Parse("2006-01-02 15:04:05 -0700", strings.TrimSpace(parts[1]))
 		if err != nil {
 			continue
@@ -378,10 +423,10 @@ func ProjectFromSnapshot(snapshot GitSnapshot) ProjectMeta {
 		name = filepath.Base(snapshot.Root)
 	}
 	return ProjectMeta{
-		Name:      sanitizeExternalMetadata(name),
+		Name:      sanitizeMetadataTitle(name),
 		Slug:      Slugify(name),
 		Remote:    snapshot.Remote,
-		LocalPath: sanitizeExternalMetadata(snapshot.Root),
+		LocalPath: sanitizeMetadataPath(snapshot.Root),
 	}
 }
 
@@ -492,30 +537,30 @@ func RenderGitState(snapshot GitSnapshot) string {
 }
 
 func sanitizeGitSnapshot(snapshot GitSnapshot) GitSnapshot {
-	snapshot.Root = sanitizeExternalMetadata(snapshot.Root)
-	snapshot.RepoName = sanitizeExternalMetadata(snapshot.RepoName)
+	snapshot.Root = sanitizeMetadataPath(snapshot.Root)
+	snapshot.RepoName = sanitizeMetadataTitle(snapshot.RepoName)
 	snapshot.Remote = sanitizeExternalMetadata(snapshot.Remote)
-	snapshot.Branch = sanitizeExternalMetadata(snapshot.Branch)
-	snapshot.Worktree = sanitizeExternalMetadata(snapshot.Worktree)
+	snapshot.Branch = sanitizeMetadataBranch(snapshot.Branch)
+	snapshot.Worktree = sanitizeMetadataPath(snapshot.Worktree)
 	snapshot.WorktreeStatus = sanitizeExternalMetadata(snapshot.WorktreeStatus)
 	for i := range snapshot.ChangedFiles {
-		snapshot.ChangedFiles[i].Path = sanitizeExternalMetadata(snapshot.ChangedFiles[i].Path)
+		snapshot.ChangedFiles[i].Path = sanitizeMetadataPath(snapshot.ChangedFiles[i].Path)
 	}
 	for i := range snapshot.RecentCommits {
-		snapshot.RecentCommits[i].Summary = sanitizeExternalMetadata(snapshot.RecentCommits[i].Summary)
+		snapshot.RecentCommits[i].Summary = sanitizeMetadataTitle(snapshot.RecentCommits[i].Summary)
 	}
 	for i := range snapshot.Worktrees {
-		snapshot.Worktrees[i].Path = sanitizeExternalMetadata(snapshot.Worktrees[i].Path)
-		snapshot.Worktrees[i].Branch = sanitizeExternalMetadata(snapshot.Worktrees[i].Branch)
+		snapshot.Worktrees[i].Path = sanitizeMetadataPath(snapshot.Worktrees[i].Path)
+		snapshot.Worktrees[i].Branch = sanitizeMetadataBranch(snapshot.Worktrees[i].Branch)
 	}
 	for i := range snapshot.StaleBranches {
-		snapshot.StaleBranches[i].Name = sanitizeExternalMetadata(snapshot.StaleBranches[i].Name)
+		snapshot.StaleBranches[i].Name = sanitizeMetadataBranch(snapshot.StaleBranches[i].Name)
 	}
 	for i := range snapshot.HealthNotes {
 		snapshot.HealthNotes[i] = sanitizeExternalMetadata(snapshot.HealthNotes[i])
 	}
 	for i := range snapshot.Commands {
-		snapshot.Commands[i] = sanitizeExternalMetadata(snapshot.Commands[i])
+		snapshot.Commands[i] = sanitizeMetadataCommand(snapshot.Commands[i])
 	}
 	return snapshot
 }

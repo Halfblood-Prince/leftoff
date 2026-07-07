@@ -1,6 +1,6 @@
 # Pi Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `pi`
 Suggested target: `~/.pi/skills/leftoff/`
 

@@ -47,11 +47,15 @@ if (Get-Command go -ErrorAction SilentlyContinue) {
 }
 
 Write-Error @"
-leftoff binary is not installed for $platform.
+leftoff needs a local binary.
 
-Ask the user for explicit approval before network access, then run:
+Platform: $platform
+
+Option 1: Run setup with explicit approval:
   powershell -ExecutionPolicy Bypass -File .\scripts\setup-binary.ps1
 
-If Go 1.22+ is installed, the launcher can also run the source fallback.
+Option 2: Install Go 1.22+ and use the source fallback.
+
+Option 3: Download the verified release archive manually.
 "@
 exit 127

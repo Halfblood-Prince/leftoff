@@ -1,6 +1,6 @@
 # Codex Adapter
 
-Status: Supported
+Status: Officially tested
 Installer aliases: `codex`
 Suggested target: `${CODEX_HOME:-~/.codex}/skills/leftoff/`
 

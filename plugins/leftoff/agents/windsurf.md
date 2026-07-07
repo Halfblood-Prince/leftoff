@@ -1,6 +1,6 @@
 # Windsurf Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `windsurf`
 Suggested target: `~/.windsurf/skills/leftoff/`
 

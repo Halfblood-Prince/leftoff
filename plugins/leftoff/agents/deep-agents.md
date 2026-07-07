@@ -1,6 +1,6 @@
 # Deep Agents Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `deep-agents`, `deepagents`
 Suggested target: `~/.deep-agents/skills/leftoff/`
 

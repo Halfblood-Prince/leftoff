@@ -1,6 +1,6 @@
 # CodeBuddy Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `codebuddy`
 Suggested target: `~/.codebuddy/skills/leftoff/`
 

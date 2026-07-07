@@ -12,7 +12,7 @@ Usage: ./uninstall.sh [--agent NAME] [--target PATH] [--dry-run]
 Removes an installed leftoff skill directory or symlink. This does not delete
 the user data store at ~/.leftoff.
 
-Supported agents are listed in agents/supported.md.
+Known agent targets are listed in agents/supported.md.
 USAGE
 }
 

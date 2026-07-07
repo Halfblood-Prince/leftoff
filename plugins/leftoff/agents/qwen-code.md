@@ -1,6 +1,6 @@
 # Qwen Code Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `qwen-code`, `qwen`
 Suggested target: `~/.qwen-code/skills/leftoff/`
 

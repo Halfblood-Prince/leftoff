@@ -1,6 +1,6 @@
 # Cline / Roo Code Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `cline-roo-code`, `cline`, `roo`, `roo-code`
 Suggested target: `~/.cline/skills/leftoff/`
 

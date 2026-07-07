@@ -5,10 +5,10 @@
 ## Highlights
 
 - Plain Markdown and JSONL store under `~/.leftoff/`.
-- Shared `skills/leftoff/SKILL.md` contract for AI agents.
+- Shared `plugins/leftoff/skills/leftoff/SKILL.md` contract for AI agents.
 - Dedicated `plugins/leftoff/` Claude and Codex plugin package with repo-local marketplace catalogues.
-- GitHub Agent Skills support through `gh skill` discovery of `skills/leftoff/SKILL.md`.
-- Adapter notes and installer aliases for the supported agent roster in `agents/supported.md`.
+- GitHub Agent Skills support through `gh skill` discovery of the plugin-contained skill.
+- Adapter notes and installer aliases with evidence-based status categories in `plugins/leftoff/agents/supported.md`.
 - CI, CodeQL, fuzzing, and annotated-tag release workflows.
 - macOS Intel and Apple Silicon release bundles.
 - Explicit capture only; no silent surveillance.

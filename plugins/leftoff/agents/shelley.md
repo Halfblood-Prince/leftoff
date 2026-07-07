@@ -1,6 +1,6 @@
 # Shelley Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `shelley`
 Suggested target: `~/.shelley/skills/leftoff/`
 

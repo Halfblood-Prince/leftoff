@@ -1,6 +1,6 @@
 # Rovo Dev Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `rovo-dev`, `rovo`
 Suggested target: `~/.rovo/skills/leftoff/`
 

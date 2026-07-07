@@ -91,7 +91,7 @@ func (s *Store) LoadSavedState(projectSlug string) SavedState {
 	}
 	state := ParseSavedState(string(content))
 	state.Exists = true
-	state.Path = path
+	state.Path = sanitizeMetadataPath(path)
 	return state
 }
 
@@ -124,6 +124,13 @@ func ParseSavedState(content string) SavedState {
 			state.DirtyFiles = value
 		}
 	}
+	state.Path = sanitizeMetadataPath(state.Path)
+	state.Repository = sanitizeMetadataTitle(state.Repository)
+	state.Remote = sanitizeExternalMetadata(state.Remote)
+	state.Worktree = sanitizeMetadataPath(state.Worktree)
+	state.Branch = sanitizeMetadataBranch(state.Branch)
+	state.Head = sanitizeExternalMetadata(state.Head)
+	state.DirtyFiles = sanitizeMetadataTitle(state.DirtyFiles)
 	return state
 }
 

@@ -1,6 +1,6 @@
 # Continue Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `continue`
 Suggested target: `~/.continue/skills/leftoff/`
 

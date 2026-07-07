@@ -1,6 +1,6 @@
 # ForgeCode Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `forgecode`
 Suggested target: `~/.forgecode/skills/leftoff/`
 

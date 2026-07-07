@@ -1,6 +1,6 @@
 # Hermes Agent Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `hermes-agent`, `hermes`
 Suggested target: `~/.hermes/skills/leftoff/`
 

@@ -12,6 +12,9 @@ jobs:
   test:
     name: Go tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: plugins/leftoff
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +30,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
         with:
-          go-version-file: go.mod
+          go-version-file: plugins/leftoff/go.mod
           cache: true
 
       - name: Check formatting
@@ -57,14 +60,14 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          go install golang.org/x/vuln/cmd/govulncheck@latest
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
           govulncheck ./...
 
       - name: Run staticcheck
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
+          go install honnef.co/go/tools/cmd/staticcheck@v0.7.0
           staticcheck ./...
 
       - name: Installer dry run
@@ -83,6 +86,7 @@ jobs:
           HOME="$tmp_home" CODEX_HOME="$tmp_home/.codex" sh ./install.sh --agent codex --mode copy
           test -f "$tmp_home/.codex/skills/leftoff/skills/leftoff/SKILL.md"
           test -f "$tmp_home/.codex/skills/leftoff/bin/leftoff"
+          test -x "$tmp_home/.codex/skills/leftoff/bin/leftoff"
           HOME="$tmp_home" CODEX_HOME="$tmp_home/.codex" sh ./uninstall.sh --agent codex --dry-run
 
       - name: Installer dry run

@@ -1,14 +1,12 @@
 #!/usr/bin/env sh
 set -eu
 
-version="$(tr -d '[:space:]' < VERSION)"
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+plugin_root="${PLUGIN_ROOT:-$(CDPATH= cd -- "$script_dir/.." && pwd)}"
+
+version="$(tr -d '[:space:]' < "${plugin_root}/VERSION")"
 tag="${TAG:-v${version}}"
 tag_version="${tag#v}"
-plugin_root="${PLUGIN_ROOT:-plugins/leftoff}"
-
-if [ ! -f "${plugin_root}/.claude-plugin/plugin.json" ] || [ ! -f "${plugin_root}/.codex-plugin/plugin.json" ]; then
-  plugin_root="."
-fi
 
 test "$version" = "$tag_version"
 jq -e --arg v "$tag_version" '.version == $v' "${plugin_root}/.claude-plugin/plugin.json" >/dev/null

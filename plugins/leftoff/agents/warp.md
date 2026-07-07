@@ -1,6 +1,6 @@
 # Warp Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `warp`
 Suggested target: `~/.warp/skills/leftoff/`
 

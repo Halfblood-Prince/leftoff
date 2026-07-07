@@ -34,11 +34,23 @@ The project is written in Go and uses only the Go standard library.
 
 The core workflow does not require network access, analytics, a GitHub token, or any external service. GitHub metadata is optional and runs only when explicitly requested with `github --refresh`.
 
-## Supported Agents
+## Support Status
 
 The shared behavior lives in [skills/leftoff/SKILL.md](skills/leftoff/SKILL.md). The full support matrix, aliases, adapter files, and suggested local targets live in [agents/supported.md](agents/supported.md).
 
-Supported agents include Claude Code, Codex, Cursor, Pi, GitHub Copilot CLI, OpenCode, Gemini CLI / Antigravity, Factory AI Droid, OpenClaw, Hermes Agent, AstrBot, NanoClaw, Shelley, Auggie / Augment, Cline / Roo Code, CodeBuddy, Continue, Crush, Deep Agents, Firebender, ForgeCode, Goose, Junie, Kilo Code, Kimi Code CLI, Kiro CLI, Lingma, Mistral Vibe, Mux, OpenHands, Qoder, Qwen Code, Rovo Dev, Tabnine CLI, Trae / Trae CN, Warp, Windsurf, Zed, and generic Markdown-instruction hosts.
+Officially tested:
+
+- Claude Code
+- Codex
+- GitHub Agent Skills CLI
+
+Compatible:
+
+- Hosts that support standard `SKILL.md` folders and can load `skills/leftoff/SKILL.md`.
+
+Experimental:
+
+- Host-specific adapter notes included under `agents/`, but not yet end-to-end tested across those hosts.
 
 ## Installation
 
@@ -68,7 +80,7 @@ Install as a GitHub Agent Skill:
 
 ```sh
 gh skill preview Halfblood-Prince/leftoff leftoff
-gh skill install Halfblood-Prince/leftoff leftoff@v0.2.0 --agent codex --scope user
+gh skill install Halfblood-Prince/leftoff leftoff --agent codex --scope user
 ```
 
 Release bundles include `leftoff.skill.zip`, a plugin-shaped archive with `.claude-plugin/`, `.codex-plugin/`, `skills/leftoff/SKILL.md`, source, launchers, and prebuilt platform binaries where available. Platform bundles also include a single prebuilt `leftoff` binary, including macOS Intel and Apple Silicon builds.
@@ -106,7 +118,9 @@ bin/leftoff
 powershell -ExecutionPolicy Bypass -File .\bin\leftoff.ps1
 ```
 
-If no bundled binary is present, ask the user before any network access, then run the setup script:
+Marketplace installs provide the source files, not a prebuilt binary. If no bundled binary is present, `leftoff` needs a local binary.
+
+Option 1: Run setup with explicit approval:
 
 ```sh
 ./scripts/setup-binary.sh
@@ -115,6 +129,10 @@ If no bundled binary is present, ask the user before any network access, then ru
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-binary.ps1
 ```
+
+Option 2: Install Go 1.22+ and use the source fallback.
+
+Option 3: Download the verified release archive manually.
 
 The setup flow downloads the platform release bundle with GitHub CLI, verifies GitHub artifact provenance, checks `SHA256SUMS`, and installs the binary under `bin/.leftoff/<os>_<arch>/`. It never uses `curl | sh`.
 

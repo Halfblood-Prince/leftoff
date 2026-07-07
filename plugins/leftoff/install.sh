@@ -12,7 +12,7 @@ Usage: ./install.sh [--agent NAME] [--target PATH] [--mode copy|symlink] [--dry-
 
 Installs this repository as a leftoff skill.
 
-Supported agents are listed in agents/supported.md.
+Known agent targets are listed in agents/supported.md.
 
 Default target:
   ~/.leftoff/skills/leftoff
@@ -217,8 +217,8 @@ else
   tar -cf - \
     --exclude '.git' \
     --exclude '.tmp' \
-    --exclude 'leftoff' \
-    --exclude 'leftoff.exe' \
+    --exclude './leftoff' \
+    --exclude './leftoff.exe' \
     -C "$source_dir" . | tar -xf - -C "$target"
 fi
 

@@ -1,6 +1,6 @@
 # Firebender Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `firebender`
 Suggested target: `~/.firebender/skills/leftoff/`
 

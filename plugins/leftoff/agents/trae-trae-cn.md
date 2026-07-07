@@ -1,6 +1,6 @@
 # Trae / Trae CN Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `trae-trae-cn`, `trae`, `trae-cn`
 Suggested target: `~/.trae/skills/leftoff/`
 

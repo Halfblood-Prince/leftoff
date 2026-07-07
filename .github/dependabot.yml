@@ -15,7 +15,7 @@ updates:
           - "*"
 
   - package-ecosystem: "gomod"
-    directory: "/"
+    directory: "/plugins/leftoff"
     schedule:
       interval: "weekly"
       day: "monday"

@@ -1,6 +1,6 @@
 # Qoder Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `qoder`
 Suggested target: `~/.qoder/skills/leftoff/`
 

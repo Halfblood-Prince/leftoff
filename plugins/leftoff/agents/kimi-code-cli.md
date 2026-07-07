@@ -1,6 +1,6 @@
 # Kimi Code CLI Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `kimi-code-cli`, `kimi`
 Suggested target: `~/.kimi-code-cli/skills/leftoff/`
 

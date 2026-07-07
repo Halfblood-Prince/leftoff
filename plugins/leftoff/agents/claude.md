@@ -1,6 +1,6 @@
 # Claude Code Adapter
 
-Status: Supported
+Status: Officially tested
 Installer aliases: `claude-code`, `claude`
 Suggested target: `~/.claude/skills/leftoff/`
 

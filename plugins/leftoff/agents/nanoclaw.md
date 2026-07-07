@@ -1,6 +1,6 @@
 # NanoClaw Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `nanoclaw`
 Suggested target: `~/.nanoclaw/skills/leftoff/`
 

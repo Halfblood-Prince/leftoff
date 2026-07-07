@@ -1,6 +1,10 @@
 /leftoff
 /leftoff.exe
+/plugins/leftoff/leftoff
+/plugins/leftoff/leftoff.exe
 /bin/.leftoff/
+/plugins/leftoff/bin/.leftoff/
 /coverage.out
+/plugins/leftoff/coverage.out
 /.tmp/
 .tmp/

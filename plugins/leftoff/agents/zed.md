@@ -1,6 +1,6 @@
 # Zed Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `zed`
 Suggested target: `~/.zed/skills/leftoff/`
 

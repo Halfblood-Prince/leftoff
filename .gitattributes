@@ -10,4 +10,4 @@
 *.png binary
 .gitattributes text eol=lf
 .gitignore text eol=lf
-/bin/leftoff text eol=lf
+plugins/leftoff/bin/leftoff text eol=lf

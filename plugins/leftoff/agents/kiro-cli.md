@@ -1,6 +1,6 @@
 # Kiro CLI Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `kiro-cli`, `kiro`
 Suggested target: `~/.kiro/skills/leftoff/`
 

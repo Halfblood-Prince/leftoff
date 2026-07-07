@@ -1,6 +1,6 @@
 # Generic Agent Adapter
 
-Status: Supported
+Status: Compatible
 Installer aliases: `generic`
 Suggested target: `~/.leftoff/skills/leftoff/`
 

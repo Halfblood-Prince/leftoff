@@ -68,8 +68,8 @@ func (s *Store) AddWorkspaceRepo(ctx context.Context, req WorkspaceAddRequest) (
 		return WorkspaceAddResult{}, err
 	}
 	abs = filepath.Clean(abs)
-	if sanitizeExternalMetadata(abs) != abs {
-		return WorkspaceAddResult{}, errors.New("repository path contains secret-like metadata; refusing to persist it")
+	if sanitizeMetadataPath(abs) != abs {
+		return WorkspaceAddResult{}, errors.New("repository path contains secret-like or oversized metadata; refusing to persist it")
 	}
 
 	snapshot := InspectRepository(ctx, abs, s.now)
@@ -77,8 +77,8 @@ func (s *Store) AddWorkspaceRepo(ctx context.Context, req WorkspaceAddRequest) (
 		return WorkspaceAddResult{}, fmt.Errorf("workspace add requires a Git repository: %s", strings.Join(snapshot.HealthNotes, "; "))
 	}
 	root := filepath.Clean(snapshot.Root)
-	if sanitizeExternalMetadata(root) != root {
-		return WorkspaceAddResult{}, errors.New("repository root contains secret-like metadata; refusing to persist it")
+	if sanitizeMetadataPath(root) != root {
+		return WorkspaceAddResult{}, errors.New("repository root contains secret-like or oversized metadata; refusing to persist it")
 	}
 
 	registry, registryPath, err := s.loadWorkspaceRegistry()
@@ -257,9 +257,9 @@ func (s *Store) saveWorkspaceScanResult(result WorkspaceScanResult) error {
 }
 
 func sanitizeWorkspaceRepository(repo WorkspaceRepository) WorkspaceRepository {
-	repo.Name = sanitizeExternalMetadata(repo.Name)
+	repo.Name = sanitizeMetadataTitle(repo.Name)
 	repo.ProjectSlug = Slugify(repo.ProjectSlug)
-	repo.Path = sanitizeExternalMetadata(repo.Path)
+	repo.Path = sanitizeMetadataPath(repo.Path)
 	repo.AddedAt = sanitizeExternalMetadata(repo.AddedAt)
 	repo.LastScannedAt = sanitizeExternalMetadata(repo.LastScannedAt)
 	return repo
@@ -267,12 +267,12 @@ func sanitizeWorkspaceRepository(repo WorkspaceRepository) WorkspaceRepository {
 
 func sanitizeWorkspaceScanResult(result WorkspaceScanResult) WorkspaceScanResult {
 	result.Output = sanitizeExternalMetadata(result.Output)
-	result.RegistryPath = sanitizeExternalMetadata(result.RegistryPath)
-	result.CachePath = sanitizeExternalMetadata(result.CachePath)
+	result.RegistryPath = sanitizeMetadataPath(result.RegistryPath)
+	result.CachePath = sanitizeMetadataPath(result.CachePath)
 	for i := range result.Repositories {
 		result.Repositories[i].Repository = sanitizeWorkspaceRepository(result.Repositories[i].Repository)
 		result.Repositories[i].Snapshot = sanitizeGitSnapshot(result.Repositories[i].Snapshot)
-		result.Repositories[i].StatePath = sanitizeExternalMetadata(result.Repositories[i].StatePath)
+		result.Repositories[i].StatePath = sanitizeMetadataPath(result.Repositories[i].StatePath)
 	}
 	for i := range result.HealthNotes {
 		result.HealthNotes[i] = sanitizeExternalMetadata(result.HealthNotes[i])

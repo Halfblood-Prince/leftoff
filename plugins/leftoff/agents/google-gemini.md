@@ -1,6 +1,6 @@
 # Gemini CLI / Antigravity Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `gemini-cli-antigravity`, `gemini`, `google-gemini`, `antigravity`
 Suggested target: `~/.gemini/skills/leftoff/`
 

@@ -1,6 +1,6 @@
 # Cursor Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `cursor`
 Suggested target: `~/.cursor/skills/leftoff/`
 

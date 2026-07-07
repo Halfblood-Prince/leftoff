@@ -1,6 +1,6 @@
 # Tabnine CLI Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `tabnine-cli`, `tabnine`
 Suggested target: `~/.tabnine/skills/leftoff/`
 

@@ -27,6 +27,15 @@ var secretPatterns = []secretPattern{
 	{name: "authorization header", severity: "high", pattern: regexp.MustCompile(`(?i)\bauthorization\s*:\s*bearer\s+[A-Za-z0-9._~+/=-]+`)},
 }
 
+var promptLikeMetadataPattern = regexp.MustCompile(`(?i)\b(ignore (?:all )?(?:previous|prior|above) instructions|system prompt|developer message|act as|you are now)\b`)
+
+const (
+	maxMetadataBranchName = 160
+	maxMetadataPath       = 512
+	maxMetadataTitle      = 160
+	maxMetadataCommand    = 512
+)
+
 func FindSecrets(text string) []SecretFinding {
 	var findings []SecretFinding
 	for _, candidate := range secretPatterns {
@@ -51,10 +60,35 @@ func sanitizeExternalMetadata(text string) string {
 	for _, candidate := range secretPatterns {
 		sanitized = candidate.pattern.ReplaceAllString(sanitized, "[redacted "+candidate.name+"]")
 	}
+	sanitized = promptLikeMetadataPattern.ReplaceAllString(sanitized, "[redacted prompt-like metadata]")
 	if strings.TrimSpace(sanitized) == "" {
 		return "[redacted external metadata]"
 	}
 	return sanitized
+}
+
+func sanitizeMetadataBranch(text string) string {
+	return sanitizeMetadataField(text, maxMetadataBranchName)
+}
+
+func sanitizeMetadataPath(text string) string {
+	return sanitizeMetadataField(text, maxMetadataPath)
+}
+
+func sanitizeMetadataTitle(text string) string {
+	return sanitizeMetadataField(text, maxMetadataTitle)
+}
+
+func sanitizeMetadataCommand(text string) string {
+	return sanitizeMetadataField(text, maxMetadataCommand)
+}
+
+func sanitizeMetadataField(text string, limit int) string {
+	sanitized := sanitizeExternalMetadata(text)
+	if sanitized == "" {
+		return ""
+	}
+	return cleanSummary(sanitized, limit)
 }
 
 func RedactRemoteURL(remote string) string {

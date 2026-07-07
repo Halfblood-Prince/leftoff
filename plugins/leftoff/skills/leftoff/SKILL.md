@@ -1,11 +1,11 @@
 ---
 name: leftoff
-description: Local-first skill for AI coding agents and developer assistants, including Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot CLI, OpenCode, OpenClaw, Hermes Agent, and other supported hosts. Use when an agent needs to capture explicit unfinished work, resume local repository context, recommend what to work on next, recall decisions or solved problems, review weekly progress, detect recurring friction, or inspect cleanup opportunities from local evidence without requiring cloud services.
+description: Local-first skill for AI coding agents and developer assistants, including Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot CLI, OpenCode, OpenClaw, Hermes Agent, and other compatible or experimental hosts. Use when an agent needs to capture explicit unfinished work, resume local repository context, recommend what to work on next, recall decisions or solved problems, review weekly progress, detect recurring friction, or inspect cleanup opportunities from local evidence without requiring cloud services.
 ---
 
 # leftoff
 
-Use `leftoff` as a local memory and work-queue skill for developer work. The skill is host-neutral: supported agents should follow this shared contract and use the plugin-root launcher for deterministic local operations.
+Use `leftoff` as a local memory and work-queue skill for developer work. The skill is host-neutral: host adapters should follow this shared contract and use the plugin-root launcher for deterministic local operations.
 
 ## Safety Rules
 
@@ -78,11 +78,19 @@ It also supports release bundles that include platform binaries:
 <plugin-root>/bin/windows_arm64/leftoff.exe
 ```
 
-If no installed or bundled binary is available, the launcher may fall back to the Go source only when Go 1.22+ is already installed. Do not tell users without Go to run source commands.
+If no installed or bundled binary is available, the launcher may fall back to the Go source only when Go 1.22+ is already installed. Without Go, it fails with `leftoff needs a local binary.` and offers setup, Go source fallback, or manual verified release download. Do not tell users without Go to run source commands.
 
 ## Binary Setup
 
 Git marketplace installation copies plugin source. It does not automatically download GitHub Release assets.
+
+If no bundled binary is present, `leftoff` needs a local binary.
+
+Option 1: Run setup with explicit approval.
+
+Option 2: Install Go 1.22+ and use the source fallback.
+
+Option 3: Download the verified release archive manually.
 
 Before any network access, ask the user for explicit approval. If approved, run one of:
 
@@ -100,7 +108,7 @@ The setup scripts download the correct release bundle with GitHub CLI, verify Gi
 
 - Load this `SKILL.md` as the primary instruction file.
 - Use adapter notes in `../../agents/` only to map the skill into a specific host.
-- Use [../../agents/supported.md](../../agents/supported.md) for the supported-agent list, aliases, and suggested local targets.
+- Use [../../agents/supported.md](../../agents/supported.md) for compatibility status, aliases, and suggested local targets.
 - Use [references/host-compatibility.md](references/host-compatibility.md) when installing or adapting the skill for a new agent.
 - Keep shared behavior, data rules, and safety rules in this file or `references/`; keep host-specific details in `../../agents/`.
 

@@ -1,6 +1,6 @@
 # Auggie / Augment Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `auggie-augment`, `auggie`, `augment`
 Suggested target: `~/.augment/skills/leftoff/`
 

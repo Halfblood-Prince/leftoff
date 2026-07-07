@@ -19,6 +19,9 @@ jobs:
   release:
     name: Build and publish release
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins/leftoff
 
     steps:
       - name: Check out repository
@@ -51,7 +54,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
         with:
-          go-version-file: go.mod
+          go-version-file: plugins/leftoff/go.mod
           cache: true
 
       - name: Check plugin versions
@@ -71,17 +74,18 @@ jobs:
         run: |
           set -euo pipefail
 
-          rm -rf dist
-          mkdir -p dist
+          dist_dir="${GITHUB_WORKSPACE}/dist"
+          rm -rf "$dist_dir"
+          mkdir -p "$dist_dir"
 
           copy_plugin_files() {
             local target="$1"
             mkdir -p "$target"
-            cp -R plugins/leftoff/. "$target"/
+            cp -R . "$target"/
             chmod +x "$target/bin/leftoff" "$target/scripts/setup-binary.sh"
           }
 
-          skill_dir="dist/leftoff.skill"
+          skill_dir="$dist_dir/leftoff.skill"
           copy_plugin_files "$skill_dir"
 
           platforms=(
@@ -97,7 +101,7 @@ jobs:
             goos="${platform%/*}"
             goarch="${platform#*/}"
             name="leftoff_${TAG}_${goos}_${goarch}"
-            package_dir="dist/${name}"
+            package_dir="$dist_dir/${name}"
             copy_plugin_files "$package_dir"
             mkdir -p "$package_dir/bin"
             binary="leftoff"
@@ -109,22 +113,22 @@ jobs:
               -o "$package_dir/bin/$binary" ./cmd/leftoff
             mkdir -p "$skill_dir/bin/${goos}_${goarch}"
             cp "$package_dir/bin/$binary" "$skill_dir/bin/${goos}_${goarch}/$binary"
-            (cd dist && zip -qr "${name}.zip" "$name")
+            (cd "$dist_dir" && zip -qr "${name}.zip" "$name")
           done
 
-          (cd "$skill_dir" && zip -qr "../leftoff.skill.zip" .)
-          (cd dist && sha256sum *.zip > SHA256SUMS)
+          (cd "$skill_dir" && zip -qr "$dist_dir/leftoff.skill.zip" .)
+          (cd "$dist_dir" && sha256sum *.zip > SHA256SUMS)
 
       - name: Verify skill archive layout
         shell: bash
         run: |
           set -euo pipefail
-          unzip -l dist/leftoff.skill.zip | grep -E '(^|[[:space:]])skills/leftoff/SKILL.md$'
-          unzip -l dist/leftoff.skill.zip | grep -E '(^|[[:space:]]).claude-plugin/plugin.json$'
-          unzip -l dist/leftoff.skill.zip | grep -E '(^|[[:space:]]).codex-plugin/plugin.json$'
-          unzip -l dist/leftoff.skill.zip | grep -E '(^|[[:space:]])bin/leftoff$'
-          unzip -l dist/leftoff.skill.zip | grep -E 'bin/darwin_arm64/leftoff$'
-          unzip -l dist/leftoff.skill.zip | grep -E 'bin/darwin_amd64/leftoff$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E '(^|[[:space:]])skills/leftoff/SKILL.md$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E '(^|[[:space:]]).claude-plugin/plugin.json$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E '(^|[[:space:]]).codex-plugin/plugin.json$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E '(^|[[:space:]])bin/leftoff$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E 'bin/darwin_arm64/leftoff$'
+          unzip -l "$GITHUB_WORKSPACE/dist/leftoff.skill.zip" | grep -E 'bin/darwin_amd64/leftoff$'
 
       - name: Smoke test Linux release archive
         shell: bash
@@ -133,7 +137,7 @@ jobs:
         run: |
           set -euo pipefail
           smoke_dir="$(mktemp -d)"
-          unzip -q "dist/leftoff_${TAG}_linux_amd64.zip" -d "$smoke_dir"
+          unzip -q "$GITHUB_WORKSPACE/dist/leftoff_${TAG}_linux_amd64.zip" -d "$smoke_dir"
           bundle="$smoke_dir/leftoff_${TAG}_linux_amd64"
           store="$(mktemp -d)"
           "$bundle/bin/leftoff" version
@@ -153,7 +157,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.tag }}
         run: |
-          cat > dist/release-notes.md <<EOF
+          cat > "$GITHUB_WORKSPACE/dist/release-notes.md" <<EOF
           ## Install
 
           GitHub Agent Skill install:
@@ -186,13 +190,13 @@ jobs:
           TAG: ${{ steps.tag.outputs.tag }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/*.zip dist/SHA256SUMS --clobber
+            gh release upload "$TAG" "$GITHUB_WORKSPACE"/dist/*.zip "$GITHUB_WORKSPACE"/dist/SHA256SUMS --clobber
             gh release edit "$TAG" \
               --title "leftoff $TAG" \
-              --notes-file dist/release-notes.md
+              --notes-file "$GITHUB_WORKSPACE/dist/release-notes.md"
           else
-            gh release create "$TAG" dist/*.zip dist/SHA256SUMS \
+            gh release create "$TAG" "$GITHUB_WORKSPACE"/dist/*.zip "$GITHUB_WORKSPACE"/dist/SHA256SUMS \
               --title "leftoff $TAG" \
-              --notes-file dist/release-notes.md \
+              --notes-file "$GITHUB_WORKSPACE/dist/release-notes.md" \
               --verify-tag
           fi

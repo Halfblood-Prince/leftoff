@@ -13,6 +13,9 @@ jobs:
   analyze:
     name: Analyze Go
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins/leftoff
 
     steps:
       - name: Check out repository
@@ -21,7 +24,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
         with:
-          go-version-file: go.mod
+          go-version-file: plugins/leftoff/go.mod
           cache: true
 
       - name: Initialize CodeQL

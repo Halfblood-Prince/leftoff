@@ -1,6 +1,6 @@
 # Kilo Code Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `kilo-code`, `kilocode`
 Suggested target: `~/.kilo-code/skills/leftoff/`
 

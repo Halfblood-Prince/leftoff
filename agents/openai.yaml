@@ -1,7 +1,0 @@
-interface:
-  display_name: "leftoff"
-  short_description: "Local work memory and next-task guidance"
-  default_prompt: "Use $leftoff to capture unfinished work, resume local context, or recommend the next task from local evidence."
-
-policy:
-  allow_implicit_invocation: true

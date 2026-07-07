@@ -1,6 +1,6 @@
 # Crush Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `crush`
 Suggested target: `~/.crush/skills/leftoff/`
 

@@ -1,6 +1,6 @@
 # Goose Adapter
 
-Status: Supported
+Status: Experimental
 Installer aliases: `goose`
 Suggested target: `~/.goose/skills/leftoff/`
 

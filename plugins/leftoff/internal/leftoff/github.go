@@ -252,12 +252,12 @@ func parseGitHubPRs(data []byte) []GitHubPRSummary {
 	for _, item := range raw {
 		out = append(out, GitHubPRSummary{
 			Number:         item.Number,
-			Title:          cleanSummary(sanitizeExternalMetadata(item.Title), 160),
+			Title:          sanitizeMetadataTitle(item.Title),
 			State:          item.State,
 			IsDraft:        item.IsDraft,
 			ReviewDecision: item.ReviewDecision,
 			UpdatedAt:      item.UpdatedAt,
-			HeadRefName:    sanitizeExternalMetadata(item.HeadRefName),
+			HeadRefName:    sanitizeMetadataBranch(item.HeadRefName),
 		})
 	}
 	return out
@@ -283,7 +283,7 @@ func parseGitHubIssues(data []byte) []GitHubIssueSummary {
 		sort.Strings(labels)
 		out = append(out, GitHubIssueSummary{
 			Number:    item.Number,
-			Title:     cleanSummary(sanitizeExternalMetadata(item.Title), 160),
+			Title:     sanitizeMetadataTitle(item.Title),
 			State:     item.State,
 			UpdatedAt: item.UpdatedAt,
 			Labels:    labels,
@@ -308,8 +308,8 @@ func parseGitHubRuns(data []byte) []GitHubRunSummary {
 			DatabaseID: item.DatabaseID,
 			Status:     item.Status,
 			Conclusion: item.Conclusion,
-			Name:       cleanSummary(sanitizeExternalMetadata(item.Name), 120),
-			HeadBranch: cleanSummary(sanitizeExternalMetadata(item.HeadBranch), 120),
+			Name:       sanitizeMetadataTitle(item.Name),
+			HeadBranch: sanitizeMetadataBranch(item.HeadBranch),
 			UpdatedAt:  item.UpdatedAt,
 		})
 	}
@@ -415,18 +415,18 @@ func sanitizeGitHubCache(cache GitHubCache) GitHubCache {
 		cache.HealthNotes[i] = sanitizeExternalMetadata(cache.HealthNotes[i])
 	}
 	for i := range cache.PullRequests {
-		cache.PullRequests[i].Title = sanitizeExternalMetadata(cache.PullRequests[i].Title)
-		cache.PullRequests[i].HeadRefName = sanitizeExternalMetadata(cache.PullRequests[i].HeadRefName)
+		cache.PullRequests[i].Title = sanitizeMetadataTitle(cache.PullRequests[i].Title)
+		cache.PullRequests[i].HeadRefName = sanitizeMetadataBranch(cache.PullRequests[i].HeadRefName)
 	}
 	for i := range cache.Issues {
-		cache.Issues[i].Title = sanitizeExternalMetadata(cache.Issues[i].Title)
+		cache.Issues[i].Title = sanitizeMetadataTitle(cache.Issues[i].Title)
 		for j := range cache.Issues[i].Labels {
 			cache.Issues[i].Labels[j] = sanitizeExternalMetadata(cache.Issues[i].Labels[j])
 		}
 	}
 	for i := range cache.WorkflowRuns {
-		cache.WorkflowRuns[i].Name = sanitizeExternalMetadata(cache.WorkflowRuns[i].Name)
-		cache.WorkflowRuns[i].HeadBranch = sanitizeExternalMetadata(cache.WorkflowRuns[i].HeadBranch)
+		cache.WorkflowRuns[i].Name = sanitizeMetadataTitle(cache.WorkflowRuns[i].Name)
+		cache.WorkflowRuns[i].HeadBranch = sanitizeMetadataBranch(cache.WorkflowRuns[i].HeadBranch)
 	}
 	return cache
 }
