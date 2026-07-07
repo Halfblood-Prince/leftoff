@@ -1,0 +1,43 @@
+{
+  "name": "leftoff",
+  "version": "1.0.0",
+  "description": "Local-first memory and next-task guidance for unfinished developer work.",
+  "author": {
+    "name": "Halfblood-Prince",
+    "url": "https://github.com/Halfblood-Prince"
+  },
+  "homepage": "https://github.com/Halfblood-Prince/leftoff",
+  "repository": "https://github.com/Halfblood-Prince/leftoff",
+  "license": "MIT",
+  "keywords": [
+    "developer-productivity",
+    "git",
+    "work-queue",
+    "local-first"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "leftoff",
+    "shortDescription": "Remember unfinished work and choose the next task.",
+    "longDescription": "Uses explicit local records and read-only Git metadata to reconstruct unfinished developer work and recommend a grounded next action.",
+    "developerName": "Halfblood-Prince",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/Halfblood-Prince/leftoff",
+    "privacyPolicyURL": "https://github.com/Halfblood-Prince/leftoff/blob/main/PRIVACY.md",
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "screenshots": [
+      "./assets/screenshot.png"
+    ],
+    "defaultPrompt": [
+      "What should I work on next?",
+      "Resume the work I left unfinished in this repository.",
+      "I have 45 minutes. What is the highest-impact task I can finish?"
+    ]
+  }
+}

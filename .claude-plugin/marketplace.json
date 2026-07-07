@@ -1,0 +1,20 @@
+{
+  "name": "leftoff-marketplace",
+  "owner": {
+    "name": "Halfblood-Prince"
+  },
+  "description": "Local-first developer workflow tools.",
+  "plugins": [
+    {
+      "name": "leftoff",
+      "source": "./plugins/leftoff",
+      "description": "Local-first memory and next-task guidance for unfinished developer work.",
+      "category": "productivity",
+      "tags": [
+        "git",
+        "productivity",
+        "local-first"
+      ]
+    }
+  ]
+}

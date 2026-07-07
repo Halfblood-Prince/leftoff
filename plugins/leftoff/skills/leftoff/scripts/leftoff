@@ -1,0 +1,53 @@
+#!/usr/bin/env sh
+set -eu
+
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+plugin_root="$(CDPATH= cd -- "$script_dir/.." && pwd)"
+bin_home="${LEFTOFF_BIN_HOME:-${HOME}/.leftoff/bin}"
+
+os="$(uname -s 2>/dev/null | tr '[:upper:]' '[:lower:]')"
+arch="$(uname -m 2>/dev/null | tr '[:upper:]' '[:lower:]')"
+
+case "$os" in
+  linux*) goos="linux" ;;
+  darwin*) goos="darwin" ;;
+  msys*|mingw*|cygwin*) goos="windows" ;;
+  *) goos="$os" ;;
+esac
+
+case "$arch" in
+  x86_64|amd64) goarch="amd64" ;;
+  arm64|aarch64) goarch="arm64" ;;
+  *) goarch="$arch" ;;
+esac
+
+exe="leftoff"
+if [ "$goos" = "windows" ]; then
+  exe="leftoff.exe"
+fi
+
+installed="$bin_home/${goos}_${goarch}/$exe"
+bundled="$script_dir/${goos}_${goarch}/$exe"
+
+if [ -x "$installed" ]; then
+  exec "$installed" "$@"
+fi
+
+if [ -x "$bundled" ]; then
+  exec "$bundled" "$@"
+fi
+
+cat >&2 <<EOF
+leftoff needs a local binary.
+
+Platform: ${goos}_${goarch}
+
+Option 1: Run setup with explicit approval:
+  $plugin_root/scripts/setup-binary.sh
+
+Option 2: Install Go 1.22+ and use the Go install fallback:
+  go install github.com/Halfblood-Prince/leftoff/cmd/leftoff@latest
+
+Option 3: Download the verified release archive manually.
+EOF
+exit 127

@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Go tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Check formatting
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          files="$(gofmt -l cmd internal)"
+          if [ -n "$files" ]; then
+            echo "These files need gofmt:"
+            echo "$files"
+            exit 1
+          fi
+
+      - name: Check plugin versions
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sh ./plugins/leftoff/scripts/check-version.sh
+
+      - name: Validate GitHub Agent Skill
+        if: runner.os == 'Linux'
+        run: gh skill publish --dry-run
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Run govulncheck
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+          govulncheck ./...
+
+      - name: Run staticcheck
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@v0.7.0
+          staticcheck ./...
+
+      - name: Installer dry run
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sh ./plugins/leftoff/install.sh --agent codex --dry-run
+          sh ./plugins/leftoff/uninstall.sh --agent windsurf --dry-run
+
+      - name: Installer copy smoke
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp_home="$(mktemp -d)"
+          HOME="$tmp_home" CODEX_HOME="$tmp_home/.codex" sh ./plugins/leftoff/install.sh --agent codex --mode copy
+          test -f "$tmp_home/.codex/skills/leftoff/skills/leftoff/SKILL.md"
+          test -f "$tmp_home/.codex/skills/leftoff/bin/leftoff"
+          test -x "$tmp_home/.codex/skills/leftoff/bin/leftoff"
+          test -x "$tmp_home/.codex/skills/leftoff/skills/leftoff/scripts/leftoff"
+          HOME="$tmp_home" CODEX_HOME="$tmp_home/.codex" sh ./plugins/leftoff/uninstall.sh --agent codex --dry-run
+
+      - name: Installer dry run
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\leftoff\install.ps1 -Agent codex -DryRun
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\leftoff\uninstall.ps1 -Agent windsurf -DryRun
+
+      - name: Installer copy smoke
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $tmpHome = Join-Path ([System.IO.Path]::GetTempPath()) ("leftoff-home-" + [guid]::NewGuid().ToString("N"))
+          New-Item -ItemType Directory -Force -Path $tmpHome | Out-Null
+          $env:HOME = $tmpHome
+          $env:CODEX_HOME = Join-Path $tmpHome ".codex"
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\leftoff\install.ps1 -Agent codex -Mode copy
+          if (-not (Test-Path -LiteralPath (Join-Path $env:CODEX_HOME "skills\leftoff\skills\leftoff\SKILL.md") -PathType Leaf)) { throw "installed skill missing" }
+          if (-not (Test-Path -LiteralPath (Join-Path $env:CODEX_HOME "skills\leftoff\bin\leftoff.ps1") -PathType Leaf)) { throw "installed launcher missing" }
+          if (-not (Test-Path -LiteralPath (Join-Path $env:CODEX_HOME "skills\leftoff\skills\leftoff\scripts\leftoff.ps1") -PathType Leaf)) { throw "installed skill launcher missing" }
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\leftoff\uninstall.ps1 -Agent codex -DryRun

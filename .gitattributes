@@ -1,0 +1,16 @@
+*.json text eol=lf
+*.go text eol=lf
+*.mod text eol=lf
+*.sum text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.png binary
+.gitattributes text eol=lf
+.gitignore text eol=lf
+VERSION text eol=lf
+plugins/leftoff/bin/leftoff text eol=lf
+plugins/leftoff/skills/leftoff/scripts/leftoff text eol=lf
+plugins/leftoff/skills/leftoff/scripts/setup-binary.sh text eol=lf
